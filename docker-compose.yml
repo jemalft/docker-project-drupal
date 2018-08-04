@@ -1,0 +1,29 @@
+version: '3'
+services:
+  web:
+    image: lullaboteducation/drupaldevwithdocker-php
+    volumes:
+      - ./docroot/drupal-8.5.4:/var/www/html:cached
+    ports:
+      - "80:80"
+  db:
+    image: lullaboteducation/drupaldevwithdocker-mysql
+#    volumes:
+#      - ./db-backups:/var/mysql/backups:delegated
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: drupaldb
+      MYSQL_USER: drupal
+      MYSQL_PASSWORD: verybadpassword
+    ports:
+      - "3306:3306"
+  pma:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+      PHP_UPLOAD_MAX_FILESIZE: 1G
+      PHP_MAX_INPUT_VARS: 1G
+    ports:
+     - "8001:80"
